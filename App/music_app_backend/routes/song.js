@@ -48,7 +48,7 @@ router.get("/get/artist/:artistId",passport.authenticate("jwt",{session: false})
 router.get("/get/songname/:songname",passport.authenticate("jwt",{session: false}), async (req, res) => {
    
     const {songname} = req.params;
-    const song = await Songmod.find({name: songname});
+    const song = await Songmod.find({name: songname}).populate("artist");
     return res.status(200).json({data: song});
 });
 

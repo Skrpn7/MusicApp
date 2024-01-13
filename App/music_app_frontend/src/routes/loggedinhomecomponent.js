@@ -3,6 +3,11 @@ import Texthover from "../components/shared/Texthover";
 import Icontext from "../components/shared/icontext";
 import { Icon } from '@iconify/react';
 import Playview from "../components/shared/playlistview";
+import { useState } from "react";
+import { Howl, Howler } from 'howler';
+import LoggedinContainer from "../containers/Loggedincontainers";
+
+
 
 const focuscardsdata = [{
     title: "Taylor Swift",
@@ -31,67 +36,145 @@ const focuscardsdata = [{
 }]
 
 
+// const Loggedinhomecomponent = () => {
+
+//     const [SoundPlayed, SetSoundPlayed] = useState(null)
+//     const [Ispaused,setIspaused] = useState(true)
+
+//     const playSound = (Songsrc) => {
+//         if (SoundPlayed) {
+//             SoundPlayed.stop();
+//         }
+//         let sound = new Howl({
+//             src: [Songsrc],
+//             html5: true
+//         });
+//         SetSoundPlayed(sound)
+//         sound.play();
+//     }
+
+//     const pauseSound = ()=>{
+//         SoundPlayed.pause()
+//     }
+
+//     const toggleplaypause = ()=>{
+//         if(Ispaused){
+//             playSound("https://res.cloudinary.com/ddmqeu1ab/video/upload/v1700550790/lcr6z5thh7qbzlrllref.mp3")
+//             setIspaused(false);
+//         }else{
+//             pauseSound();
+//             setIspaused(true);
+//         }
+//     }
+
+//     return (
+//         <div className="h-full w-full bg-app-black ">
+//             <div className="w-full h-9/10 flex">
+//                 <div className="h-full w-1/5 bg-black flex flex-col justify-between pb-10">
+//                     {/* div for logo */}
+//                     <div>
+//                         <div className="p-6  ">
+//                             <img src={iheartradio} alt="iheartlogo" width={300} />
+//                             {/* <Icon icon="simple-icons:iheartradio" color="red" width={80} /> */}
+//                         </div>
+//                         <div className="py-3">
+//                             <Icontext iconName={"line-md:home-simple-filled"} displaytext="Home" hFlip="flase" />
+//                             <Icontext iconName={"line-md:search-twotone"} displaytext="Search" hFlip="true" />
+//                             <Icontext iconName={"fluent:library-28-filled"} displaytext="Library" hFlip="false" />
+//                             <Icontext iconName={"mdi:folder-music"} displaytext="My Music" hFlip="false" />
+//                         </div>
+//                         <div className="pt-7">
+//                             <Icontext iconName={"line-md:plus-square"} displaytext="Create a playlist" hFlip="false" />
+//                             <Icontext iconName={"noto:red-heart"} displaytext="Liked Songs" hFlip="false" />
+//                         </div>
+//                     </div>
+//                     <div className="px-5">
+//                         <div className="border border-gray-500 text-white w-2/5 flex items-center justify-center rounded-full px-2 py-1 text-sm font-semibold hover:border-white cursor-pointer">
+//                             <Icon icon="bi:globe" />
+//                             <div className="ml-2">
+//                                 English
+//                             </div>
+//                         </div>
+//                     </div>
+//                 </div>
+//                 {/* remaining part of the body */}
+//                 <div className="h-full w-4/5 bg-app-black overflow-auto">
+//                     {/* navbar div */}
+//                     <div className="navbar bg-black w-full h-1/10 bg-opacity-50 flex items-center justify-end ">
+//                         <div className="w-1/2 flex h-full">
+//                             <div className="w-2/3 flex justify-around items-center">
+//                                 <Texthover displaytext={"Premium"} />
+//                                 <Texthover displaytext={"Support"} />
+//                                 <Texthover displaytext={"Download"} />
+//                                 <div className="h-1/2 border-r border-white"></div>
+//                             </div>
+
+//                             <div className="w-1/3 flex justify-around items-center">
+//                                 <Texthover displaytext={"Upload Songs"} />
+//                                 <div className="bg-white w-10 h-10 flex items-center justify-center rounded-full font-semibold cursor-pointer">
+//                                     SD
+//                                 </div>
+//                             </div>
+//                         </div>
+//                     </div>
+
+//                     {/* content div */}
+//                     <div className="content p-8 pt-0 overflow-auto">
+//                         <Playview titletext={"Focus"} cardsData={focuscardsdata} />
+//                         <Playview titletext={"Based on your listening"} cardsData={focuscardsdata} />
+//                         <Playview titletext={"Sound Of India"} cardsData={focuscardsdata} />
+//                     </div>
+//                 </div>
+//             </div>
+//             {/* player  */}
+//             <div className="w-full h-1/10 bg-black bg-opacity-30 text-white flex items-center px-4">
+
+//                 <div className="w-1/4 flex items-center">
+//                     <img src="https://lastfm.freetls.fastly.net/i/u/ar0/f18cb918fb193137f8f98e01f9f7de2f.jpg" alt="CurrentSongThumbnail"
+//                         className="h-14 w-14 rounded"
+//                     />
+//                     <div className="pl-4">
+//                         <div className="text-sm hover:underline cursor-pointer">
+//                             dancing With your Ghost
+//                         </div>
+
+//                         <div className="text-xs text-gray-500 hover:underline cursor-pointer">
+//                             Sasha
+//                         </div>
+//                     </div>
+//                 </div>{/* left side of the player */}
+
+//                 <div className="w-1/2 flex justify-center h-full flex-col items-center" >
+//                     <div className="flex w-1/4 justify-between items-center">
+//                         {/* control goes here */}
+//                         <Icon icon="mdi:shuffle" fontSize={27} className="cursor-pointer text-gray-400 hover:text-white" />
+//                         <Icon icon="mdi:skip-previous" fontSize={30} className="cursor-pointer text-gray-400 hover:text-white" />
+//                         <Icon icon={Ispaused?"mdi:play-circle":"mdi:pause-circle"} fontSize={45} className="cursor-pointer text-gray-400 hover:text-white" 
+//                         onClick={toggleplaypause}/>
+//                         <Icon icon="mdi:skip-next" fontSize={30} className="cursor-pointer text-gray-400 hover:text-white" />
+//                         <Icon icon="ph:repeat" fontSize={27} className="cursor-pointer text-gray-400 hover:text-white" />
+
+//                     </div>
+//                     <div>
+//                         {/* seek bar */}
+//                         Seek Bar
+//                     </div>
+//                 </div>
+//                 <div className="w-1/4 flex justify-end">Hello</div>
+
+//             </div>
+//         </div>
+//     );
+// };
+
 const Loggedinhomecomponent = () => {
     return (
-        <div className="h-full w-full flex">
-            <div className="h-full w-1/5 bg-black flex flex-col justify-between pb-10">
-                {/* div for logo */}
-                <div>
-                    <div className="p-6  ">
-                        <img src={iheartradio} alt="iheartlogo" width={300} />
-                        {/* <Icon icon="simple-icons:iheartradio" color="red" width={80} /> */}
-                    </div>
-                    <div className="py-3">
-                        <Icontext iconName={"line-md:home-simple-filled"} displaytext="Home" hFlip="flase" />
-                        <Icontext iconName={"line-md:search-twotone"} displaytext="Search" hFlip="true" />
-                        <Icontext iconName={"fluent:library-28-filled"} displaytext="Library" hFlip="false" />
-                        <Icontext iconName={"mdi:folder-music"} displaytext="My Music" hFlip="false" />
-                    </div>
-                    <div className="pt-7">
-                        <Icontext iconName={"line-md:plus-square"} displaytext="Create a playlist" hFlip="false" />
-                        <Icontext iconName={"noto:red-heart"} displaytext="Liked Songs" hFlip="false" />
-                    </div>
-                </div>
-                <div className="px-5">
-                    <div className="border border-gray-500 text-white w-2/5 flex items-center justify-center rounded-full px-2 py-1 text-sm font-semibold hover:border-white cursor-pointer">
-                        <Icon icon="bi:globe" />
-                        <div className="ml-2">
-                            English
-                        </div>
-                    </div>
-                </div>
-            </div>
-            {/* remaining part of the body */}
-            <div className="h-full w-4/5 bg-app-black overflow-auto">
-                {/* navbar div */}
-                <div className="navbar bg-black w-full h-1/10 bg-opacity-50 flex items-center justify-end ">
-                    <div className="w-1/2 flex h-full">
-                        <div className="w-2/3 flex justify-around items-center">
-                            <Texthover displaytext={"Premium"} />
-                            <Texthover displaytext={"Support"} />
-                            <Texthover displaytext={"Download"} />
-                            <div className="h-1/2 border-r border-white"></div>
-                        </div>
-
-                        <div className="w-1/3 flex justify-around items-center">
-                            <Texthover displaytext={"Upload Songs"} />
-                            <div className="bg-white w-10 h-10 flex items-center justify-center rounded-full font-semibold cursor-pointer">
-                                SD
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                {/* content div */}
-                <div className="content p-8 pt-0 overflow-auto">
-                    <Playview titletext={"Focus"} cardsData={focuscardsdata} />
-                    <Playview titletext={"Based on your listening"} cardsData={focuscardsdata} />
-                    <Playview titletext={"Sound Of India"} cardsData={focuscardsdata} />
-                </div>
-            </div>
-        </div>
+        <LoggedinContainer currentactivescreen="home">
+            <Playview titletext={"Focus"} cardsData={focuscardsdata} />
+            <Playview titletext={"Based on your listening"} cardsData={focuscardsdata} />
+            <Playview titletext={"Sound Of India"} cardsData={focuscardsdata} />
+        </LoggedinContainer>
     );
-};
-
+}
 
 export default Loggedinhomecomponent;
